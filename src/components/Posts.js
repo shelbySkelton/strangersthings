@@ -91,7 +91,6 @@ const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList
                             })
                         :
                             postList.map((eachPost, idx) => {
-                                console.log(eachPost)
                                 return (
                                     <section className="each-post-section" key={idx}>
                                         <span className="post-label">Item: </span>

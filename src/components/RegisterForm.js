@@ -10,6 +10,13 @@ const RegisterForm = ({ username, setUsername, password, setPassword, token, set
     const [newPW2, setNewPW2] = useState('')
 
 
+    useEffect(() =>  {
+        
+        console.log('useeffectfired')
+
+    }, [token])
+
+
     const createUser = (evt) => {
         evt.preventDefault();
  
@@ -24,7 +31,6 @@ const RegisterForm = ({ username, setUsername, password, setPassword, token, set
 
     }
  
-
 
 
 
