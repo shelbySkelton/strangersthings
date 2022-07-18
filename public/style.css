@@ -1,0 +1,86 @@
+.navbar {
+    border: solid black 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: lightgray;
+    padding: 4px;
+    font-size: 20px;
+}
+
+#strangersthings {
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 40px;
+}
+
+.post-page-title {
+    color: white;
+    text-shadow: 2px 2px 2px black;
+    font-size: 50px;
+}
+.homepage-container {
+    text-align: center;
+}
+#my-messages-container {
+    border: solid gray 1px;
+    background-color: lightcyan;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.my-posts-container {
+    border: solid gray 1px;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-title {
+
+    text-align: center;
+}
+
+#add-post-form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+#edit-post-form{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#posts-container {
+    background-color: lightblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.each-post-section {
+    box-shadow: 2px 2px 10px slategrey;
+    background-color: white;
+    margin: 5px;
+    width: 700px;
+    padding: 5px;
+}
+
+#welcome{
+    text-align: center;
+}
+
+.add-post-container {
+    border: 2px 2px solid blue;
+}
+.post-id {
+    color: lightgray;
+}
+#edit-post-link {
+    text-align: right;
+}
