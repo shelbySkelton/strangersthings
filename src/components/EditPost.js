@@ -4,7 +4,7 @@ import { fetchAllPosts, patchEdit } from "../api";
 
 
 
-const EditPost = ({ isLoggedIn, username, token }) => {
+const EditPost = ({ isLoggedIn, token }) => {
     const { postId } = useParams();
 
     const [title, setTitle] = useState('')
@@ -13,92 +13,114 @@ const EditPost = ({ isLoggedIn, username, token }) => {
     const [location, setLocation] = useState('[On Request]')
     const [willDeliver, setWillDeliver]= useState(false)
     const [postList, setPostList] = useState([])
+    const [editSuccess, setEditSuccess] = useState(false);
+
+    let postIdArray = postId.split('');
+    postIdArray.shift();
+    let colonlessPostId = postIdArray.join('')
+
 
     useEffect(() =>  {
-        let returnedPosts= []
+        
         
         const getPosts = async () => {
-            returnedPosts = await fetchAllPosts(token);
+            const returnedPosts = await fetchAllPosts(token);
             setPostList(returnedPosts);
         }
-        getPosts()
 
-        postList.map((eachPost) => {
-                        
-            let eachpostid = ":" + eachPost._id
-            if (eachpostid === postId) {
-                setTitle(eachPost.title);
-                setDescription(eachPost.description)
-                setPrice(eachPost.price)
-                setLocation(eachPost.location)
-                setWillDeliver(eachPost.willDeliver)
-            }
-        })
-    
-    },[postList])
+    getPosts();
+    }, [isLoggedIn])
+
+
+   
 
     const submitEdits = async (evt) => {
         evt.preventDefault();
-            console.log(token, title, description, price, location, willDeliver)
-        // const result = await patchEdit(postId, token, title, description, price, location, willDeliver)
+        const result = await patchEdit(colonlessPostId, token, title, description, price, location, willDeliver)
+        if (result.success) {
+            setEditSuccess(result.success)
+            setTitle(result.data.post.title)
+            setLocation(result.data.post.location)
+            setDescription(result.post.data.description)
+            setPrice(result.data.post.price)
+            setWillDeliver(result.data.post.willDeliver)
+        }
+        console.log(result)
+        return result;
     }
     
 
+
     return (
-        
         <section id='edit-post-container'>
+            {
+                postList.map((eachPost, idx) => {
+                    {
+                        if (eachPost._id === colonlessPostId) {
+                            return (
+                            <section className="each-post-section" key={idx}>
+                                <h1>My Post</h1>
+                                <p hidden={!editSuccess}>*UPDATED*</p>
+                                <span className="post-label">Item: </span>
+                                <span className="post-title">{ editSuccess ? title : eachPost.title}</span><br></br>
+                                <span className="post-label">Location: </span>
+                                <span className="post-location">{ editSuccess ? location : eachPost.location}</span><br></br>
+                                <span className="post-label">Description: </span>
+                                <span className="post-description">{ editSuccess ? description : eachPost.description}</span><br></br>
+                                <span className="post-label">Price: </span>
+                                <span className="post-price">{ editSuccess ? price : eachPost.price}</span><br></br>
+                                <span className="post-label">Delivery Available: </span>
+                                <span className="post-delivery">{ editSuccess ? willDeliver : eachPost.willDeliver ? "Yes" : "No"}</span><br></br>
+                             </section>
+                            )
+                        }
+                    }
+                })
+
+            }
+   
+            <h1>Edit Post</h1>          
 
             
-
-
-            <h1>Edit Post {postId} </h1>
-
                 <form
                     id='edit-post-form'
                     onSubmit={submitEdits}
                 >
-                    <label className='form-label'>Title: {title}</label>
                     <input
                         type='text'
-                        placeholder={title}
+                        placeholder="Title"
+                        required
                         onChange={(evt) => setTitle(evt.target.value)}
-                    >
-                    </input>
-                    <label className='form-label'>Description: {description}</label>
+                    ></input>
                     <input
                         type='text'
-                        placeholder={description}
-                        onChange={(evt) => setDescription(evt.target.value)}
-                    >
-                    </input>
-                    <label className='form-label'>Price: {price}</label>
-                    <input
-                        type='text'
-                        placeholder={price ? price : 'not provided'}
-                        onChange={(evt) => setPrice(evt.target.value)}
-                    >
-                    </input>
-                    <label className='form-label'>Location: {location}</label>
-                    <input
-                        type='text'
-                        placeholder={location ? location : 'not provided'}
+                        required
+                        placeholder="Location"
                         onChange={(evt) => setLocation(evt.target.value)}
-                    >
-                    </input>
-                    <label className='form-label'>Willing to Deliver?</label>
+                    ></input>
+                    <input
+                        type='text'
+                        required
+                        placeholder="Description"
+                        onChange={(evt) => setDescription(evt.target.value)}
+                    ></input>
+                    <input
+                        type='text'
+                        required
+                        placeholder="Price"
+                        onChange={(evt) => setPrice(evt.target.value)}
+                    ></input>                    
+                    <label id='delivery-label'>Willing to Deliver?</label>
                     <input
                         type='checkbox'
-                        checked={willDeliver}
                         id="willdeliverycheckbox"
                         onChange={(evt) => setWillDeliver(!willDeliver)}
-                    >
-                    </input>
+                    ></input>
                     <input
                         type="submit"
                         disabled= {isLoggedIn ? false : true}
-                        value="Edit Post"
-                    >
-                    </input>
+                        value="Edit My Post"
+                    ></input>
                 </form>
             
         </section>

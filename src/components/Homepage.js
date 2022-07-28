@@ -1,6 +1,5 @@
 import React from "react";
-import Profile from "./Profile";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { cohortName } from "../api";
 
 
 const Homepage = ({ isLoggedIn, currentUser, token }) => {
@@ -16,10 +15,12 @@ const Homepage = ({ isLoggedIn, currentUser, token }) => {
                 isLoggedIn ? 
                 
                     <div id='homepage-logged-in display'>
+                        <h2>Cohort: {cohortName}</h2>
                         <h3>We're logged in as {currentUser.username}</h3>
+
                     </div>
                 
-                : "Log In Please"
+                : "Log In To Get Started!"
             }
             
                  

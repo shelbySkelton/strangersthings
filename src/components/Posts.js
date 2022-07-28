@@ -1,12 +1,14 @@
 
 import React, { useEffect, useState } from "react";
 import {  fetchAllPosts, deletePost } from "../api";
-import { Link } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 
 const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList }) => {
   
     const [postUpdate, setPostUpdate] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
+    const [messageSubmit, setMessageSubmit] = useState(false);
+    const [postId, setPostId] = useState('')
  
 
     
@@ -41,27 +43,38 @@ const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList
     const filteredPosts = postList.filter(eachPost => postMatches(eachPost, searchTerm))
     const postsToDisplay = searchTerm.length ? filteredPosts : postList;
 
-
+    function messageSubmitHandler (postid) {
+        setPostId(postid);
+        setMessageSubmit(true);
+    }
+  
 
     return (
             <div id="posts-container">
-                  <h1 className='post-page-title'>Posts</h1>
-                    <Link to='/add-post'>Add Post</Link>
-                    <fieldset>
+                {
+                 messageSubmit ?
+                                            
+                <Navigate to={`/add-message/:${postId}`} />
+                :
+                null
+                }
+                    <Link id="add-post-link" to='/add-post'>Add Post</Link>
+                    
                         <input
                             id='search-words'
                             type='text'
                             value={searchTerm}
-                            placeholder="Search Posts"
+                            placeholder="Search Posts..."
                             onChange={(evt)=> setSearchTerm(evt.target.value)}
                         ></input>
-                    </fieldset>
+                    
                     {
                         searchTerm.length 
                         ? 
                             postsToDisplay.map((eachPost,idx) => {
                                 return (
                                     <section className="each-post-section" key={idx}>
+                                        <span id="post-id">id:{eachPost._id}</span><br></br>
                                         <span className="post-label">Item: </span>
                                         <span className="post-title">{eachPost.title}</span><br></br>
                                         <span className="post-label">Location: </span>
@@ -76,23 +89,25 @@ const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList
                                         <span className="post-price">{eachPost.price}</span><br></br>
                                         <span className="post-label">Delivery Available: </span>
                                         <span className="post-delivery">{eachPost.willDeliver ? "Yes" : "No"}</span><br></br>
-                                        {/* <span className="post-label">Messages: </span> */}
-                                        {/* <span className="post-delivery">{eachPost.messages ? "Yes" : "No"}</span><br></br> */}
-                                        <span className="post-id">id: {eachPost._id}</span><br></br>
+                                        <button
+                                                className='message-button'
+                                                onClick={(evt) => {messageSubmitHandler(eachPost._id)}}>Message</button>
                                         <span><button
-                                               hidden={ username === eachPost.author.username ? false : true}
-                                               onClick={(evt) => deletePost(token, eachPost._id)}
-                                               onChange={(evt) => setPostUpdate('updated')}
-                                               >Delete my post</button></span>
-                                        
-                                        
+                                            className="delete-post"
+                                            hidden={ username === eachPost.author.username ? false : true}
+                                            onClick={(evt) => deletePost(token, eachPost._id)}
+                                            onChange={(evt) => setPostUpdate('updated')}
+                                            >Delete my post</button></span>
                                     </section>
                                 )
                             })
                         :
                             postList.map((eachPost, idx) => {
+
                                 return (
                                     <section className="each-post-section" key={idx}>
+                                        <span id="post-id">id:{eachPost._id}</span><br></br>
+
                                         <span className="post-label">Item: </span>
                                         <span className="post-title">{eachPost.title}</span><br></br>
                                         <span className="post-label">Location: </span>
@@ -107,10 +122,11 @@ const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList
                                         <span className="post-price">{eachPost.price}</span><br></br>
                                         <span className="post-label">Delivery Available: </span>
                                         <span className="post-delivery">{eachPost.willDeliver ? "Yes" : "No"}</span><br></br>
-                                        {/* <span className="post-label">Messages: </span> */}
-                                        {/* <span className="post-delivery">{eachPost.messages.content}</span><br></br> */}
-                                        <span className="post-id">id: {eachPost._id}</span><br></br>
+                                        <button
+                                                className='message-button'
+                                                onClick={(evt) => {messageSubmitHandler(eachPost._id)}}>Message</button>
                                         <span><button
+                                            className="delete-post"
                                             hidden={ username === eachPost.author.username ? false : true}
                                             onClick={(evt) => deletePost(token, eachPost._id)}
                                             onChange={(evt) => setPostUpdate('updated')}

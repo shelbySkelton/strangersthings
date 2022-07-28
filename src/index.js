@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM  from "react-dom";
-import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import { 
         Homepage,
@@ -51,30 +51,35 @@ const App= () => {
     return (
         <div className='app'>
             <Router>
-                <h1 id='strangersthings'>Strangers Things</h1>
+                <header id='main-header'>
+                <img id="header-logo" src="https://i.ibb.co/kgV1QJ7/Screen-Shot-2022-07-26-at-8-51-19-AM.png" alt="Stranger's Things"></img>
+                </header>
                 <navbar className="navbar">
-                    <Link to="/">Home</Link>
-                    <Link to="/posts">Posts</Link>
-                    <Link to="/profile">Profile</Link>
+                    <Link className="nav-link" to="/">Home</Link>
+                    <Link className="nav-link" to="/posts">Posts</Link>
+                    { isLoggedIn ? <Link className="nav-link" to="/profile/">Profile</Link> : null}
                     {
-                        !localStorage.currentUser  ?
-                            <Link to="/log-in/">Log In</Link>
+                        !isLoggedIn  ?
+                            <Link className="nav-link" to="/log-in/">Log In</Link>
                             :
-                            <Link to="/"
+                            <Link className="nav-link" to="/"
                                   onClick={(evt) => {
                                     evt.preventDefault();
                                     localStorage.removeItem('currentUser')
                                     localStorage.removeItem('token')
                                     setUsername('')
                                     setPassword('')
+                                    setCurrentUser({})
                                     setToken('')
                                     setIsLoggedIn(false);
+                                    
                                 }}> Log Out
                             </Link>
                     }
                 
                     
                 </navbar>
+                
                 <Routes>
                     <Route path="/" 
                             element={<Homepage
@@ -92,7 +97,7 @@ const App= () => {
                                 setPostList={setPostList}
                             />} 
                     /> 
-                    <Route path="/profile" 
+                    <Route path="/profile/" 
                             element={<Profile
                                 isLoggedIn={isLoggedIn} 
                                 token={token}
@@ -132,17 +137,14 @@ const App= () => {
                                 token={token}
                             />}    
                     />
-                    <Route path='/add-message'
+                    <Route path='/add-message/:postId'
                             element={<AddMessage
                                 isLoggedIn={isLoggedIn}
                                 username={username}
+                                token = {token}
                             />}
                     />     
                 </Routes>
-
-
-
-
             </Router>
         </div>
     )

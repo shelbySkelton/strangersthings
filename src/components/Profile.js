@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link , useParams, Route } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { getMe, deletePost } from '../api'
-import EditPost from './EditPost';
 
 
 const Profile = ( { token, setToken, isLoggedIn, currentUser, username } ) => {
-
     const [myPosts, setMyPosts] = useState([]);
     const [myMessages, setMyMessages] = useState([])
 
@@ -40,36 +38,35 @@ const Profile = ( { token, setToken, isLoggedIn, currentUser, username } ) => {
             {
                 !isLoggedIn
                     ? 
-                    <h1>Please Log In to View Your Profile</h1>
+                    <Navigate to="/log-in/"/>
                     :
                         
-                    <div className="profile-container">
-                        <h1 id='welcome'>Welcome {username}!</h1>
+                    <div>
+                        <h1 id='welcome'>Welcome, {username}</h1>
                         <section id='my-messages-container'>
-                        <h1 className="profile-title">My Messages</h1>
+                        <h1 id="messages-title">My Messages</h1>
                             {
                             myMessages.length === 0
                             ?
                                 <h3>You Don't Have Any Messages</h3>
                             :
                                 myMessages.map((message, idx) => {
-                                
-                                    
+                                                                        
                                     return (
                                         <section className='each-post-section' key={idx}>
                                             <span className="message-label">Item: </span>
-                                            <span className="message-title">{message.post.title}</span><br></br>
+                                            <span className="message-detail">{message.post.title}</span><br></br>
                                             <span className="message-label">From User: </span>
-                                            <span className="message-author">{message.fromUser.username}</span><br></br>
+                                            <span className="message-detail">{message.fromUser.username}</span><br></br>
                                             <span className="message-label">Message: </span>
-                                            <span className="message-title">{message.content}</span><br></br>
+                                            <span className="message">{message.content}</span><br></br>
                                         </section>
                                     )
                                 })
                             }
                         </section>
                         <section className='my-posts-container'>
-                        <h1 className='profile-title'>My Posts</h1>
+                        <h1 id='posts-title'>My Posts</h1>
                             {
                             myPosts.length === 0
                             ?
@@ -79,8 +76,12 @@ const Profile = ( { token, setToken, isLoggedIn, currentUser, username } ) => {
                                     
                     
                                     return (
-                                        <section className='each-post-section' key={idx}>
-                                           
+                                        <section 
+                                            className='each-post-section' 
+                                            key={idx}
+                                            id= { mypost.active ? "active-post" : "deleted-post" }
+                                        >   
+                                            <span id="post-id">id:{mypost._id}</span><br></br>
                                             <span className="post-label">Item: </span>
                                             <span className="post-title">{mypost.title}</span><br></br>
                                             <span className="post-label">Location: </span>
@@ -93,24 +94,18 @@ const Profile = ( { token, setToken, isLoggedIn, currentUser, username } ) => {
                                             <span className="post-price">{mypost.price}</span><br></br>
                                             <span className="post-label">Delivery Available: </span>
                                             <span className="post-delivery">{mypost.willDeliver ? "Yes" : "No"}</span><br></br>
-                                            <span className="post-label">Messages :</span><br></br>
-                                            {/* <span className="post-posted">{mypost.messages ? "PUTALINKHERE" : "No messages"}</span><br></br> */}
-                                            <span className="post-id">id: {mypost._id}</span><br></br>
-                                            <span className='delete-post'>
-                                                <button
+                                            <button
+                                                    className='delete-post'
                                                     disabled= {mypost.active ? false : true }
-                                                    onClick={(evt) => deletePost(token, mypost._id)}
+                                                    onChange= {(evt) => deletePost(token, mypost._id)}
                                                 
                                                     >Delete Post
                                                 </button>
-                                            </span>
                                             <span className='edit-post'>
                                             <div id='edit-post-link'
                                                     hidden={!mypost.active}>
                                                         <Link to={`/edit-post/:${mypost._id}`} >Edit Post</Link>
                                             </div>
-                                                
-                                                {/* <Route path='/edit-post/:postId' element={<EditPost/>}/> */}
                                             </span>
                                         </section>
                                         )

@@ -1,11 +1,37 @@
 import React from "react";
 export const BASE_URL = 'https://strangers-things.herokuapp.com';
 export const cohortName = '2206-ftb-et-web-ft-b';
-// export const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmQyMWVkZWM3ODA5MDAwMTcxMzA1NGQiLCJ1c2VybmFtZSI6InNuczA5ZiIsImlhdCI6MTY1NzkzNzYzMH0.sYZ0u-ZbNaeu3ZrAuZakv9s9eErRBdkdhtJM2eAUV9Q'
 
-export const patchEdit = async (postId, token, title, description, price, location, willDeliver) => {
+
+
+export const postMessage = async (colonlessPostId, token, messageContent) => {
+
     try {
-        const response = await fetch(`${BASE_URL}/api/${cohortName}/posts/${postId}`,
+        const response = await fetch (`${BASE_URL}/api/${cohortName}/posts/${colonlessPostId}/messages`,
+        {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                message: {
+                "content": messageContent
+                }
+            })
+        });
+        const result = await response.json();
+
+            return result;
+    } catch(error) {
+            console.error(error)
+        }
+}
+
+
+export const patchEdit = async (colonlessPostId, token, title, description, price, location, willDeliver) => {
+    try {
+        const response = await fetch(`${BASE_URL}/api/${cohortName}/posts/${colonlessPostId}`,
         {
             method: "PATCH",
             headers: {
@@ -13,7 +39,7 @@ export const patchEdit = async (postId, token, title, description, price, locati
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                "post": {
+                post: {
                     "title": title,
                     "description": description,
                     "price": price,
@@ -23,8 +49,7 @@ export const patchEdit = async (postId, token, title, description, price, locati
                 })
         });
             const result = await response.json();
-            console.log(result.success)
-            return result.data.post;
+            return result;
     } catch(error) {
             console.error(error)
         }
@@ -119,18 +144,11 @@ export const postLogIn = async (username, password) => {
                     })
                 }
         );
-            const result = await response.json()
-            if (result.success){
-                return result;
-            }
-            else {
-                return result.error
-            }
-            ;
-        }
-        catch(error){
-            console.log(error)
-        }
+        const result = await response.json()
+        return result;    
+    } catch(error){
+        console.log(error)
+    }
 }
 
 
@@ -152,12 +170,11 @@ export const postNewUser = async (username, password) => {
                     })
                 }
             );
-            const result = await response.json()
-            const resultToken = result.data.token
-            return resultToken;
+        const result = await response.json()
+        return result; 
         }
         catch(error){
-            console.error(error)
+            console.log("Errrrrrr")
         }
 }
 

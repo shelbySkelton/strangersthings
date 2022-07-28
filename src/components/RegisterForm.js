@@ -1,51 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { BASE_URL, cohortName, postNewUser } from "../api";
+import React, { useState } from "react";
+import { postNewUser } from "../api";
+import { Link } from 'react-router-dom';
 
 
 
 
-const RegisterForm = ({ username, setUsername, password, setPassword, token, setToken, setCurrentUser }) => {
+const RegisterForm = ({ username, setUsername, password, setPassword, setToken }) => {
 
     const [newPW1, setNewPW1] = useState('')
     const [newPW2, setNewPW2] = useState('')
-
-
-    useEffect(() =>  {
-        
-        console.log('useeffectfired')
-
-    }, [token])
+    const [newUserSuccess, setNewUserSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     const createUser = (evt) => {
         evt.preventDefault();
- 
         const getToken = async () => {
 
-            const returnedToken = await postNewUser(username, password);
-            setToken(returnedToken)
-            
+            const returnedResult = await postNewUser(username, password);
+            if (returnedResult.success === true) {
+                const returnedToken = returnedResult.data.token
+                setToken(returnedToken)
+                setNewUserSuccess(returnedResult.success)
+            } else if (returnedResult.success === false) {
+                setErrorMessage(returnedResult.error.message);
+            }
         }
     getToken();
-        
-
     }
  
 
 
 
     return (
-        <section className='register-form-container'>
+        <section id='register-form-container'>
             <form
                 id='register-form'
                 onSubmit={createUser}
                 >
                 {
-                    token ? 
-                        "Thanks for signing up! Log in with your new Username & Password to get started."
+                    newUserSuccess ? 
+                        <div>
+                            <p>Thanks for signing up! Please <Link to="/log-in/">Log In</Link> with your new Username and Password to get started.</p>
+                        </div>
                     :
                         <div id="log-in-inputs">
-                            <h3>Create a Log-In</h3>
+                            <h2>Create a Log-In</h2>
+                            <p className="register-message">{errorMessage}</p>
                             <input
                                 type='text'
                                 required
@@ -76,12 +77,13 @@ const RegisterForm = ({ username, setUsername, password, setPassword, token, set
                                 value='Create Account'
                                 disabled= {(newPW1 === newPW2) ? false : true}
                             ></input>
+                            <div className="register-message">
+                                {(newPW1 == newPW2 ) ? null : 'Passwords Must Match' }
+                            </div>
                     </div>
                 }
                 
-                <div>
-                    {(newPW1 == newPW2 ) ? null : 'Passwords Must Match' }
-                </div>
+                
             </form>
 
         </section>
