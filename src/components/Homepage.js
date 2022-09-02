@@ -16,7 +16,9 @@ const Homepage = ({ isLoggedIn, currentUser, token }) => {
                 
                     <div id='homepage-logged-in display'>
                         <h2>Cohort: {cohortName}</h2>
-                        <h3>We're logged in as {currentUser.username}</h3>
+                        <h3>You're logged in as {currentUser.username}</h3>
+                        <h3>Write, edit or delete posts to share with your classmates.</h3>
+                        <h3>Review posts your classmates have made and write a message if you're interested!</h3>
 
                     </div>
                 

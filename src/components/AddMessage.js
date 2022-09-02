@@ -5,7 +5,7 @@ import { postMessage, fetchAllPosts } from "../api";
 
 
 
-const AddMessage = ({ username, token, isLoggedIn}) => {
+const AddMessage = ({ username, token, isLoggedIn }) => {
     const { postId } = useParams();
     const [messageContent, setMessageContent] = useState('');
     const [messageSuccess, setMessageSuccess] = useState(false);
@@ -16,84 +16,87 @@ const AddMessage = ({ username, token, isLoggedIn}) => {
     postIdArray.shift();
     let colonlessPostId = postIdArray.join('')
 
-    useEffect(() =>  {
-        
+    useEffect(() => {
+
         const getPosts = async () => {
             let returnedPosts = await fetchAllPosts(token);
             setAllPosts(returnedPosts);
         }
 
 
-    getPosts();
+        getPosts();
     }, [])
 
-   
+
 
     const submitMessage = async (evt) => {
         evt.preventDefault();
-            console.log("token: ", token)
-            console.log("postId: ", colonlessPostId)
-            console.log("messagecontent: ", messageContent)
+        console.log("token: ", token)
+        console.log("postId: ", colonlessPostId)
+        console.log("messagecontent: ", messageContent)
         const result = await postMessage(colonlessPostId, token, messageContent)
         if (result.success) {
-            setMessageSuccess(true)}
-            setNewMessageDisplay(result.data.message.content)
+            setMessageSuccess(true)
+        }
+        setNewMessageDisplay(result.data.message.content)
         return result;
     }
 
 
     return (
         <section id="add-message-container">
-            {
-                allPosts.map((eachPost, index) => {
-                    { 
-                        if (eachPost._id === colonlessPostId) {
-                            return (
-                            <section className ="each-post-section" key={index}>
-                                <span className="post-label">Item: </span>
-                                <span className="post-title">{eachPost.title}</span><br></br>
-                                <span className="post-label">Location: </span>
-                                <span className="post-location">{eachPost.location}</span><br></br>
-                                <span className="post-label">Description: </span>
-                                <span className="post-description">{eachPost.description}</span><br></br>
-                                <span className="post-label">Price: </span>
-                                <span className="post-price">{eachPost.price}</span><br></br>
-                                <span className="post-label">Delivery Available: </span>
-                                <span className="post-delivery">{eachPost.willDeliver ? "Yes" : "No"}</span><br></br>
-                            </section>)
-                        }
-                    }
-                })
-                    
-            }
-
-            <form id= 'message-form'
+            <form id='message-form'
                 onSubmit={submitMessage}>
                 <input
                     id='message-box'
                     type='text'
                     value={messageContent}
-                    placeholder="message content"
+                    placeholder="Write a message..."
                     onChange={(evt) => setMessageContent(evt.target.value)}
-                    >
+                >
                 </input>
                 <input
                     id="submit-message"
                     type="submit"
-                    disabled= {isLoggedIn ? false : true}
+                    disabled={isLoggedIn ? false : true}
                     value={isLoggedIn ? "Submit" : "Please Log In"} >
                 </input>
             </form>
             {
                 messageSuccess ?
-                <section className="each-post-section">
-                    <span className="message-label">Message: </span>
-                    <span className="message-content">{newMessageDisplay}</span><br></br>                 
-                </section>
-                :
-                null
+                    <section className="each-post-section">
+                        <span className="message-label">Your Message: </span>
+                        <span className="message-content">{newMessageDisplay}</span><br></br>
+                    </section>
+                    :
+                    null
             }
-           
+            {
+                allPosts.map((eachPost, index) => {
+                    {
+                        if (eachPost._id === colonlessPostId) {
+                            return (
+                                    <section className="each-post-section" key={index}>
+                                        <span className="post-label">Item: </span>
+                                        <span className="post-title">{eachPost.title}</span><br></br>
+                                        <span className="post-label">Location: </span>
+                                        <span className="post-location">{eachPost.location}</span><br></br>
+                                        <span className="post-label">Description: </span>
+                                        <span className="post-description">{eachPost.description}</span><br></br>
+                                        <span className="post-label">Price: </span>
+                                        <span className="post-price">{eachPost.price}</span><br></br>
+                                        <span className="post-label">Delivery Available: </span>
+                                        <span className="post-delivery">{eachPost.willDeliver ? "Yes" : "No"}</span><br></br>
+                                    </section>
+                                )
+                        }
+                    }
+                })
+
+            }
+
+
+
         </section>
     )
 

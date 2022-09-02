@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { postPost } from "../api";
-import { Link } from 'react-router-dom'
+import {  Link } from 'react-router-dom'
 
 
 const AddPost = ({ isLoggedIn, currentUser, token }) => {
@@ -10,17 +10,43 @@ const AddPost = ({ isLoggedIn, currentUser, token }) => {
     const [price, setPrice] = useState('')
     const [location, setLocation] = useState('[On Request]')
     const [willDeliver, setWillDeliver]= useState(false)
+    const [postAdded, setPostAdded ] = useState(false)
+    const [newPost, setNewPost] = useState({})
 
 
     const submitPost = async (evt) => {
         evt.preventDefault();
         const result = await postPost(token, title, description, price, location, willDeliver)
-
+        console.log('result ', result)
+        setPostAdded(true)
+        setNewPost(result)
     }
 
 
     return(
         <section className='add-post-container'>
+            {
+                postAdded ? 
+                    <section className="each-post-section">
+                        <h1>My Post</h1>
+                        <p>*ADDED*</p>
+                        <span className="post-label">Item: </span>
+                        <span className="post-title">{ newPost.title}</span><br></br>
+                        <span className="post-label">Location: </span>
+                        <span className="post-location">{ newPost.location}</span><br></br>
+                        <span className="post-label">Description: </span>
+                        <span className="post-description">{ newPost.description}</span><br></br>
+                        <span className="post-label">Price: </span>
+                        <span className="post-price">{ newPost.price}</span><br></br>
+                        <span className="post-label">Delivery Available: </span>
+                        <span className="post-delivery">{ newPost.willDeliver ? "Yes" : "No"}</span><br></br>
+                        <br></br>
+                        <Link className="nav-link" to="/posts">Back to All Posts</Link>
+                     </section>
+                    
+                    :
+                    null
+            }
             {
                 isLoggedIn ?
                     <section>
