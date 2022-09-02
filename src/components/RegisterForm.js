@@ -45,7 +45,7 @@ const RegisterForm = ({ username, setUsername, password, setPassword, setToken }
                         </div>
                     :
                         <div id="log-in-inputs">
-                            <h2>Create a Log-In</h2>
+                            <h2>CREATE AN ACCOUNT</h2>
                             <p className="register-message">{errorMessage}</p>
                             <input
                                 type='text'
@@ -72,14 +72,15 @@ const RegisterForm = ({ username, setUsername, password, setPassword, setToken }
                                 onInput={(evt) => setNewPW2(evt.target.value)}
                                 onChange={(evt) => setPassword(evt.target.value)}      
                             ></input>
+                            
+                            <div className="register-message">
+                                {(newPW1 == newPW2 ) ? null : 'Passwords Must Match' }
+                            </div>
                             <input
                                 type='submit'
                                 value='Create Account'
                                 disabled= {(newPW1 === newPW2) ? false : true}
                             ></input>
-                            <div className="register-message">
-                                {(newPW1 == newPW2 ) ? null : 'Passwords Must Match' }
-                            </div>
                     </div>
                 }
                 

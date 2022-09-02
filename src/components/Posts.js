@@ -51,22 +51,25 @@ const Posts = ({ isLoggedIn, token, currentUser, username, postList, setPostList
 
     return (
         <div id="posts-container">
-            {
-                messageSubmit ?
-
-                    <Navigate to={`/add-message/:${postId}`} />
-                    :
-                    null
-            }
-            <Link id="add-post-link" to='/add-post'>Add Post</Link>
-
-            <input
+            <div id = 'posts-header'>
+                <Link id="add-post-link" to='/add-post'>ADD POST</Link>
+                <input
                 id='search-words'
                 type='text'
                 value={searchTerm}
                 placeholder="Search Posts..."
                 onChange={(evt) => setSearchTerm(evt.target.value)}
             ></input>
+            </div>
+            {/* {
+                messageSubmit ?
+
+                    <Navigate to={`/add-message/:${postId}`} />
+                    :
+                    null
+            } */}
+
+
 
             {
                 searchTerm.length

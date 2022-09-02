@@ -25,7 +25,7 @@
 }
 
 .nav-link:hover {
-    text-decoration: black underline wavy;
+    text-decoration: black underline;
 }
 
 #main-header {
@@ -49,7 +49,7 @@
 #log-in-box {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     background-color: white;
     box-shadow: 2px 2px 10px slategrey;
@@ -66,6 +66,10 @@
     background-color: lightblue;
     font-weight: bold;
     border: 1.5px black solid;
+}
+
+#log-in-box h2 {
+    text-transform: uppercase;
 }
 
 /* ************************** REGISTRATION ************************** */
@@ -102,6 +106,7 @@
     text-align: center;
     text-shadow: 2px 2px 5px slategrey;
     font-weight: bolder;
+    text-transform: uppercase;
 
 }
 
@@ -131,8 +136,8 @@
 .each-post-section {
     box-shadow: 2px 2px 10px slategrey;
     background-color: white;
-    margin: 5px;
-    width: 750px;
+    margin: 15px;
+    width: 650px;
     padding: 10px;
 }
 
@@ -179,7 +184,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 500px;
+    width: 650px;
     box-shadow: 2px 2px 10px slategrey;
     background-color: white;
     padding: 10px;
@@ -245,17 +250,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 
 #message-box {
     width: 400px;
-    height: 300px;
+    height: 200px;
     margin: 10px;
-    background-color: lightcyan;
-    font-family: 'Edu NSW ACT Foundation', cursive;
+    background-color: rgb(243, 250, 250);
     font-size: 20px;
-    border: 1px solid black;
     box-shadow: 2px 2px 10px slategrey;
 }
 #submit-message {
@@ -281,7 +285,7 @@
 #add-post-form {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 650px;
     background-color: white;
     box-shadow: 2px 2px 10px slategrey;
     padding: 20px;
